@@ -1,0 +1,20 @@
+{
+  "name": "ia-recommendation",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "scripts": {
+    "dev": "sucrase-node ./src/index.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "lodash": "^4.17.21",
+    "neo4j-driver": "^4.4.7"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.182",
+    "@types/node": "^18.6.1",
+    "sucrase": "^3.24.0",
+    "typescript": "^4.7.4"
+  }
+}

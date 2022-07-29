@@ -3,43 +3,43 @@ dotenv.config();
 
 import driver from './database/neo4j.driver';
 import { User } from './models/user';
-import { UserService } from './services/user-service';
+import { UserAgent } from './agents/user-agent';
 
 const main = async () => {
-  const userService = new UserService(driver);
+  const userAgent = new UserAgent(driver);
 
-  const julio = await userService.create({ name: 'Julio' });
-  const renato = await userService.create({ name: 'Renato' });
-  const marcos = await userService.create({ name: 'Marcos' });
-  const estefano = await userService.create({ name: 'Estefano' });
+  const julio = await userAgent.create({ name: 'Julio' });
+  const renato = await userAgent.create({ name: 'Renato' });
+  const marcos = await userAgent.create({ name: 'Marcos' });
+  const estefano = await userAgent.create({ name: 'Estefano' });
 
-  const recommendations = userService.findRecommendations(julio);
+  const recommendations = userAgent.findRecommendations(julio);
 
-  await userService.becomeFriendsWith({ user: julio, friend: renato });
-  await userService.becomeFriendsWith({ user: julio, friend: marcos });
-  await userService.becomeFriendsWith({ user: julio, friend: estefano });
+  await userAgent.becomeFriendsWith({ user: julio, friend: renato });
+  await userAgent.becomeFriendsWith({ user: julio, friend: marcos });
+  await userAgent.becomeFriendsWith({ user: julio, friend: estefano });
 
   // Filmes que Julio gosta
-  await userService.likeFilm(julio, 1);
-  await userService.likeFilm(julio, 2);
-  await userService.likeFilm(julio, 3);
+  await userAgent.likeFilm(julio, 1);
+  await userAgent.likeFilm(julio, 2);
+  await userAgent.likeFilm(julio, 3);
 
   // Filmes que Renato gosta
-  await userService.likeFilm(julio, 4);
-  await userService.likeFilm(julio, 5);
-  await userService.likeFilm(julio, 6);
+  await userAgent.likeFilm(julio, 4);
+  await userAgent.likeFilm(julio, 5);
+  await userAgent.likeFilm(julio, 6);
 
   // Filmes que Marcos gosta
-  await userService.likeFilm(julio, 5);
-  await userService.likeFilm(julio, 6);
-  await userService.likeFilm(julio, 7);
+  await userAgent.likeFilm(julio, 5);
+  await userAgent.likeFilm(julio, 6);
+  await userAgent.likeFilm(julio, 7);
 
   // Filmes que Estefano gosta
-  await userService.likeFilm(julio, 5);
-  await userService.likeFilm(julio, 7);
-  await userService.likeFilm(julio, 8);
+  await userAgent.likeFilm(julio, 5);
+  await userAgent.likeFilm(julio, 7);
+  await userAgent.likeFilm(julio, 8);
 
-  const julioRecommendations = await userService.findRecommendations(julio);
+  const julioRecommendations = await userAgent.findRecommendations(julio);
 
   const jsonRecommendations = julioRecommendations.map((film) => film.toJSON());
 

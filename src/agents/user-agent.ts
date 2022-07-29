@@ -2,7 +2,7 @@ import { Driver } from 'neo4j-driver';
 import { Film } from '../models/film';
 import { User } from '../models/user';
 
-export class UserService {
+export class UserAgent {
   private driver: Driver;
 
   constructor(driver: Driver) {

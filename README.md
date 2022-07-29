@@ -24,7 +24,7 @@ Para rodar, basta instalar o Node e rodar:
 `yarn dev`
 
 ---
-## Estrutura:
+## Estrutura
 
 Todo o código está dentro da pasta `/src`
 
@@ -32,7 +32,7 @@ Todo o código está dentro da pasta `/src`
 
 `models` - Pasta com as classes de modelo do sistema (User e Film)
 
-`services` - Pasta contendo as classes onde devem conter as regras de negócio
+`agents` - Pasta contendo as classes dos agentes do sistema, que manipulam o grafo
 
 `env.ts` - Arquivo onde são mapeadas as variáveis de ambiente
 

@@ -13,10 +13,19 @@ export class UserAgent {
     const user = { name };
     // TODO: Create user
 
-    return new User({
-      name: '', // substituir pelo name que o neo4j retornar
-      id: 1, // substituir pelo ID que o neo4j retornar
-    });
+    const query = 'CREATE (n:User {name: "' + name + '"}) RETURN n';
+    const session = this.driver.session();
+    const result = await session.run(query);
+
+    const singleRecord = result.records[0];
+    const node = singleRecord.get(0);
+
+    return node;
+
+    /* return new User({
+      name: name, // substituir pelo name que o neo4j retornar
+      id: node., // substituir pelo ID que o neo4j retornar
+    }); */
   }
 
   async findUserById(id: number): Promise<User> {

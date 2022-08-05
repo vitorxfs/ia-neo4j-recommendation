@@ -10,7 +10,7 @@ const main = async () => {
 
   const julio = await userAgent.create({ name: 'Julio' });
   const renato = await userAgent.create({ name: 'Renato' });
-  const marcos = await userAgent.create({ name: 'Marcos' });
+  //const marcos = await userAgent.create({ name: 'Marcos' });
   const estefano = await userAgent.create({ name: 'Estefano' });
 
   const recommendations = userAgent.findRecommendations(julio);
@@ -43,8 +43,13 @@ const main = async () => {
 
   const jsonRecommendations = julioRecommendations.map((film) => film.toJSON());
 
-  console.log('RECOMENDAÇÕES PARA JULIO')
-  console.log(JSON.stringify(jsonRecommendations, null, 2));
+  const marcos = await userAgent.findUserById(178);
+  //const teste = marcos.toJSON();
+
+  console.log(marcos.identity.low);
+
+  /* console.log('RECOMENDAÇÕES PARA JULIO')
+  console.log(JSON.stringify(jsonRecommendations, null, 2)); */
 }
 
 main();

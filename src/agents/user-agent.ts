@@ -20,22 +20,29 @@ export class UserAgent {
     const singleRecord = result.records[0];
     const node = singleRecord.get(0);
 
-    return node;
-
-    /* return new User({
-      name: name, // substituir pelo name que o neo4j retornar
-      id: node., // substituir pelo ID que o neo4j retornar
-    }); */
+    return new User({
+      name: node.properties.name, // substituir pelo name que o neo4j retornar
+      id: node.identity.low, // substituir pelo ID que o neo4j retornar
+    });
   }
 
   async findUserById(id: number): Promise<User> {
     // TODO: find user
+    const query = 'MATCH (n) WHERE id(n) = ' + id + ' RETURN n';
+
+    const session = this.driver.session();
+    const result = await session.run(query);
+
+    const singleRecord = result.records[0];
+    const node = singleRecord.get(0);
+
     return new User({
-      name: '', // substituir pelo name que o neo4j retornar
-      id: 1, // substituir pelo ID que o neo4j retornar
+      name: node.properties.name, // substituir pelo name que o neo4j retornar
+      id: node.identity.low, // substituir pelo ID que o neo4j retornar
     });
   }
 
+  //Para criar relações entre nós (exemplo): MATCH (a:Person), (b:Person) CREATE (a)-[r:RELACAO]->(b)
   async likeFilm(user: User, friendId: number): Promise<void> {
     // TODO: Connect film with user
   }

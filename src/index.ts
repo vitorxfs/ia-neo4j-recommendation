@@ -8,6 +8,7 @@ import initializeDatabase from './database/neo4j.driver';
 
 const main = async () => {
   const driver = await initializeDatabase();
+
   const userAgent = new UserAgent(driver);
   const filmAgent = new FilmAgent(driver);
 

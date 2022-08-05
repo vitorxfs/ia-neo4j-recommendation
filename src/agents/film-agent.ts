@@ -25,6 +25,6 @@ export class FilmAgent {
       directorName: film.directorName,
       genres: film.genres,
       releaseYear: film.releaseYear
-    }))
+    }));
   }
 }

@@ -11,7 +11,6 @@ export class UserAgent {
 
   async create({ name }: { name: string }): Promise<User> {
     const user = { name };
-    // TODO: Create user
 
     const query = 'CREATE (n:User {name: "' + name + '"}) RETURN n';
     const session = this.driver.session();
@@ -21,13 +20,12 @@ export class UserAgent {
     const node = singleRecord.get(0);
 
     return new User({
-      name: node.properties.name, // substituir pelo name que o neo4j retornar
-      id: node.identity.low, // substituir pelo ID que o neo4j retornar
+      name: node.properties.name,
+      id: node.identity.low,
     });
   }
 
   async findUserById(id: number): Promise<User> {
-    // TODO: find user
     const query = 'MATCH (n) WHERE id(n) = ' + id + ' RETURN n';
 
     const session = this.driver.session();
@@ -37,8 +35,8 @@ export class UserAgent {
     const node = singleRecord.get(0);
 
     return new User({
-      name: node.properties.name, // substituir pelo name que o neo4j retornar
-      id: node.identity.low, // substituir pelo ID que o neo4j retornar
+      name: node.properties.name,
+      id: node.identity.low,
     });
   }
 
@@ -49,24 +47,5 @@ export class UserAgent {
 
   async becomeFriendsWith({ user, friend }: { user: User, friend: User }): Promise<void> {
     // TODO: connect with another user
-  }
-
-  async findRecommendations(user: User): Promise<Film[]> {
-    // TODO: Query Recommendations
-    const films = [{
-      id: 0,
-      genres: [],
-      name: 'A volta dos que não foram',
-      directorName: 'Nistofer Chrolan',
-      releaseYear: 2002,
-    }]; // isso será substituido pelo retorno da api;
-
-    return films.map((film) => new Film({
-      id: film.id,
-      name: film.name,
-      directorName: film.directorName,
-      genres: film.genres,
-      releaseYear: film.releaseYear
-    }))
   }
 }

@@ -1,22 +1,25 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import driver from './database/neo4j.driver';
+import { FilmAgent } from './agents/film-agent';
 import { User } from './models/user';
 import { UserAgent } from './agents/user-agent';
+import initializeDatabase from './database/neo4j.driver';
 
 const main = async () => {
+  const driver = await initializeDatabase();
   const userAgent = new UserAgent(driver);
+  const filmAgent = new FilmAgent(driver);
 
   const julio = await userAgent.create({ name: 'Julio' });
   const renato = await userAgent.create({ name: 'Renato' });
   //const marcos = await userAgent.create({ name: 'Marcos' });
   const estefano = await userAgent.create({ name: 'Estefano' });
 
-  const recommendations = userAgent.findRecommendations(julio);
+  const recommendations = filmAgent.findRecommendations(julio);
 
   await userAgent.becomeFriendsWith({ user: julio, friend: renato });
-  await userAgent.becomeFriendsWith({ user: julio, friend: marcos });
+  // await userAgent.becomeFriendsWith({ user: julio, friend: marcos });
   await userAgent.becomeFriendsWith({ user: julio, friend: estefano });
 
   // Filmes que Julio gosta
@@ -39,14 +42,14 @@ const main = async () => {
   await userAgent.likeFilm(julio, 7);
   await userAgent.likeFilm(julio, 8);
 
-  const julioRecommendations = await userAgent.findRecommendations(julio);
+  const julioRecommendations = await filmAgent.findRecommendations(julio);
 
   const jsonRecommendations = julioRecommendations.map((film) => film.toJSON());
 
-  const marcos = await userAgent.findUserById(178);
+  // const marcos = await userAgent.findUserById(178);
   //const teste = marcos.toJSON();
 
-  console.log(marcos.identity.low);
+  // console.log(marcos.identity.low);
 
   /* console.log('RECOMENDAÇÕES PARA JULIO')
   console.log(JSON.stringify(jsonRecommendations, null, 2)); */

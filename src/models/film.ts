@@ -3,7 +3,7 @@ import { omitBy, isNil } from 'lodash';
 interface FilmAttributes {
   directorName?: string;
   id: number;
-  genres?: string[];
+  genre?: string;
   name: string;
   releaseYear?: number;
 }
@@ -11,20 +11,20 @@ interface FilmAttributes {
 export class Film {
   directorName?: string;
   id: number;
-  genres?: string[];
+  genre?: string;
   name: string;
   releaseYear?: number;
 
   constructor({
     directorName,
     id,
-    genres,
+    genre,
     name,
     releaseYear,
   }: FilmAttributes) {
     this.directorName = directorName;
     this.id = id;
-    this.genres = genres;
+    this.genre = genre;
     this.name = name;
     this.releaseYear = releaseYear;
   }
@@ -33,7 +33,7 @@ export class Film {
     return omitBy({
       directorName: this.directorName,
       id: this.id,
-      genres: this.genres,
+      genre: this.genre,
       name: this.name,
       releaseYear: this.releaseYear,
     }, isNil)

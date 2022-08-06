@@ -1,4 +1,4 @@
-import { Driver } from 'neo4j-driver';
+import { Driver, QueryResult } from 'neo4j-driver';
 import { Film } from '../models/film';
 import { User } from '../models/user';
 
@@ -9,22 +9,55 @@ export class FilmAgent {
     this.driver = driver;
   }
 
-  async findRecommendations(user: User): Promise<Film[]> {
-    // TODO: Query Recommendations
-    const films = [{
-      id: 0,
-      genres: [],
-      name: 'A volta dos que não foram',
-      directorName: 'Nistofer Chrolan',
-      releaseYear: 2002,
-    }]; // isso será substituido pelo retorno da api;
+  async findRecommendations(
+    user: User,
+    { limit }: { limit?: number } = { limit: 5 }
+  ): Promise<Film[]> {
+    const query = `
+      CALL {
+        MATCH (u:User)-[r:FRIENDS_WITH]->(f:User)-[:LIKES]->(m:Movie)
+        WHERE id(u) = ${user.id}
+        RETURN m
 
-    return films.map((film) => new Film({
-      id: film.id,
-      name: film.name,
-      directorName: film.directorName,
-      genres: film.genres,
-      releaseYear: film.releaseYear
-    }));
+        UNION ALL
+
+        MATCH (u:User)-[:LIKES]->(m1:Movie)<-[]-(p:Person)-[]->(m:Movie)
+        WHERE id(u) = ${user.id}
+        RETURN m
+
+        UNION ALL
+
+        MATCH (u:User)-[:LIKES]->(m1:Movie)<-[]-(g:Genre)-[]->(m:Movie)
+        WHERE id(u) = ${user.id}
+        RETURN m
+      }
+      RETURN m, count(m) AS occurrence
+      ORDER BY occurrence DESC
+      LIMIT ${limit}
+    `;
+
+    const result = await this.runQuery(query);
+
+    return result.records.map((node) => {
+      const film = node.get(0);
+
+      return this.filmFromJSON(film);
+    });
+  }
+
+  private filmFromJSON(json: any): Film {
+    return new Film({
+      id: json.identity.low,
+      name: json.properties.title,
+      directorName: json.properties.director,
+      genre: json.properties.genre,
+      releaseYear: json.properties.released.low,
+    });
+  }
+
+  private runQuery(query: string): Promise<QueryResult> {
+    const session = this.driver.session();
+
+    return session.run(query);
   }
 }
